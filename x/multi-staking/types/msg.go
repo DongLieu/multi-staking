@@ -100,7 +100,7 @@ func (msg MsgCreateValidator) ValidateBasic() error {
 	// note that unmarshaling from bech32 ensures both non-empty and valid
 	multiStakerAddr, valAddr, err := AccAddrAndValAddrFromStrings(msg.MultiStakerAddress, msg.ValidatorAddress)
 	if err != nil {
-		return err
+		return sdkerrors.ErrInvalidAddress.Wrapf("%s", err)
 	}
 
 	if !sdk.AccAddress(valAddr).Equals(multiStakerAddr) {
@@ -235,7 +235,7 @@ func (msg MsgDelegate) GetSignBytes() []byte {
 // ValidateBasic implements the sdk.Msg interface.
 func (msg MsgDelegate) ValidateBasic() error {
 	if _, _, err := AccAddrAndValAddrFromStrings(msg.MultiStakerAddress, msg.ValidatorAddress); err != nil {
-		return err
+		return sdkerrors.ErrInvalidAddress.Wrapf("%s", err)
 	}
 
 	if !msg.Amount.IsValid() || !msg.Amount.Amount.IsPositive() {
@@ -334,7 +334,7 @@ func (msg MsgUndelegate) GetSignBytes() []byte {
 // ValidateBasic implements the sdk.Msg interface.
 func (msg MsgUndelegate) ValidateBasic() error {
 	if _, _, err := AccAddrAndValAddrFromStrings(msg.MultiStakerAddress, msg.ValidatorAddress); err != nil {
-		return err
+		return sdkerrors.ErrInvalidAddress.Wrapf("%s", err)
 	}
 
 	if !msg.Amount.IsValid() || !msg.Amount.Amount.IsPositive() {
@@ -421,7 +421,7 @@ func (msg MsgVote) ValidateBasic() error {
 		return sdkerrors.ErrInvalidAddress.Wrapf("invalid voter address: %s", err)
 	}
 	if !govv1.ValidVoteOption(msg.Option) {
-		return sdkerrors.Wrap(govtypes.ErrInvalidVote, msg.Option.String())
+		return govtypes.ErrInvalidVote.Wrapf(msg.Option.String())
 	}
 
 	return nil
@@ -560,7 +560,7 @@ func (msg MsgWithdrawDelegatorReward) GetSignBytes() []byte {
 // quick validity check
 func (msg MsgWithdrawDelegatorReward) ValidateBasic() error {
 	if _, _, err := AccAddrAndValAddrFromStrings(msg.MultiStakerAddress, msg.ValidatorAddress); err != nil {
-		return err
+		return sdkerrors.ErrInvalidAddress.Wrapf("%s", err)
 	}
 	return nil
 }
