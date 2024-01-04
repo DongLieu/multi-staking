@@ -41,8 +41,8 @@ message UpdateBondWeightProposal {
   ];
 }
 
-// RemoveMultiStakingCoinProposal is a gov v1beta1 Content type to remove a token as a
-// bond token
+// RemoveMultiStakingCoinProposal is a gov v1beta1 Content type to remove a
+// token as a bond token
 message RemoveMultiStakingCoinProposal {
   option (gogoproto.equal) = false;
   option (gogoproto.goproto_getters) = false;
